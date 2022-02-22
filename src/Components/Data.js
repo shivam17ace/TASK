@@ -9,47 +9,35 @@ function Data(){
     const [state, setState] = useState([]);
     const [load,setLoad]= useState(false);
     const [noMore,setnoMore] = useState(true);
-      const PAGENO=1
-    const [page,setPage]= useState(2);
+    const [page,setPage]= useState(1);
     useEffect(() => {
         setLoad(false);
-    const url = `https://api.github.com/repos/neovim/neovim/pulls?page=1&per_page=100`;
-    const fetchData = async () => 
-    {
-            try {
-                    const response = await fetch(url);
-                    const json = await response.json();
-                    setState(json);
-                    //const data=  state.push(json);
-                    //setState(data);
-                    setLoad(true);
-                 } 
-                  catch (error)
-                 {
-                     console.log("error", error);
-                 }
-                };
+        const fetchData = async () => 
+        {           
+                try {   
+                        const url = `https://api.github.com/repos/neovim/neovim/pulls?page=${page}&per_page=50`;
+                        const response = await fetch(url);
+                        const json = await response.json();
+                        setState([...state,...json])
+                        setLoad(true);
+                    } 
+                    catch (error)
+                    {
+                        console.log("error", error);
+                    }
+                    //  if(fetchData.length===0 || fetchData.length<50){setnoMore(false);}
+        };
      fetchData();
 }, [page]);
-const fetchC = async ()=>{
-    const res = await fetch(`https://api.github.com/repos/neovim/neovim/pulls?page=${page}&per_page=100`);
-    const data = await res.json();
-    return data;
-};
-const fetchFor = async ()=> {
-    const fetchDataa = await fetchC();
-    setState([...state,...fetchDataa]);
-    if(fetchDataa.length===0 || fetchDataa.lengTh<20){setnoMore(false);}
-    
-    setPage(page+1);
-}
-
     return(<>
     
     <div id="scrollableDiv">
     <InfiniteScroll
     dataLength={state.length}
-    next={fetchFor}
+    next={() => {
+        setPage(page+1)
+        console.log("triggered")
+    }}
     style={{ display: 'flex', flexDirection: 'column-reverse' }} 
     hasMore={true}
     loader={<h4>Loading...</h4>}
@@ -97,13 +85,5 @@ const fetchFor = async ()=> {
       
     </>
     );
-}
+ }
 export default Data;
- /* <InfiniteScroll 
-           dataLengTh={state.lengTh}
-           next = {fetchFor()}
-            //scrollThreshold="1100px"
-           //next={() => setPage(page + 1)}
-           hasMore={true}
-           scrollableTarget="scrollableDiv"
-           loader={<h3>LOADING..</h3>} */
