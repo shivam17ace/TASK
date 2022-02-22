@@ -1,4 +1,4 @@
-import React ,{useState,useEffect} from "react";
+import React , { useState, useEffect} from "react";
 import Backdrop from "@mui/material/Backdrop";
 import CircularProgress from "@mui/material/CircularProgress";
 import InfiniteScroll from "react-infinite-scroll-component";
@@ -8,7 +8,7 @@ import 'react-super-responsive-table/dist/SuperResponsiveTableStyle.css';
 function Data(){
     const [state, setState] = useState([]);
     const [load,setLoad]= useState(false);
-    const [noMore,setnoMore] = useState(true);
+    // const [noMore,setnoMore] = useState(true);
     const [page,setPage]= useState(1);
     useEffect(() => {
         setLoad(false);
@@ -28,6 +28,7 @@ function Data(){
                     //  if(fetchData.length===0 || fetchData.length<50){setnoMore(false);}
         };
      fetchData();
+      // eslint-disable-next-line react-hooks/exhaustive-deps
 }, [page]);
     return(<>
     
